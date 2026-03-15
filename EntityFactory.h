@@ -9,7 +9,7 @@
 #include "ShooterComponent.h"
 #include "EnemyBehaveComponent.h"
 #include "HealthBarComponent.h"
-
+#include "LevelingComponent.h"
 
 namespace EntityFactory
 {
@@ -24,14 +24,14 @@ namespace EntityFactory
         auto* stats = player->AddComponent<StatsComponent>();
         stats->currentHealth = 100;
         stats->maxHealth = 100;
-        stats->speed = 50.0f;
+        stats->speed = 180.0f;
         stats->damage = 10;
         stats->fireRate = 1.0f;
 
         player->AddComponent<MovementComponent>();
         player->AddComponent<PlayerInputComponent>();
         player->AddComponent<ShooterComponent>(projectileManager);
-
+        player->AddComponent<LevelingComponent>();
 
 
 
@@ -53,7 +53,7 @@ namespace EntityFactory
 
         stats->currentHealth = (int)(40 * statScale);
         stats->maxHealth = (int)(40 * statScale);
-        stats->speed = 15.0f * statScale;
+        stats->speed = 50.0f * statScale;
         stats->damage = (int)(5 * statScale);
         stats->fireRate = 1.0f * statScale;
 
@@ -82,7 +82,7 @@ namespace EntityFactory
 
         stats->currentHealth = (int)(200 * statScale);
         stats->maxHealth = (int)(200 * statScale);
-        stats->speed = 10.0f * statScale;
+        stats->speed = 40.0f * statScale;
         stats->damage = (int)(20 * statScale);
         stats->fireRate = 1.0f * statScale;
 

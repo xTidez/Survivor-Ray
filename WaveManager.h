@@ -14,6 +14,8 @@ public:
 	int currentWave;
 	int enemiesTospawn;
 	float currentWaveTimer;
+	float spawnTimer;
+	float spawnIntervall;
 	float waveIncrementTimer;
 	float minSpawnDistanceFromPlayer;
 	bool isWavePlaying;
@@ -23,7 +25,7 @@ public:
 	float scaleEnemyStats;
 
 	WaveManager()
-		:currentWave(0), enemiesTospawn(5), currentWaveTimer(0.0f), waveIncrementTimer(30.0f), minSpawnDistanceFromPlayer(200.0f), isWavePlaying(false), scaleNrEnemiesPerWave(0.2f), scaleEnemyStats(0.1f)
+		:currentWave(0), enemiesTospawn(5), currentWaveTimer(0.0f), waveIncrementTimer(30.0f), minSpawnDistanceFromPlayer(200.0f), isWavePlaying(false), scaleNrEnemiesPerWave(0.2f), scaleEnemyStats(0.1f), spawnIntervall(0.3), spawnTimer(0.0f)
 	{
 	}
 
@@ -82,24 +84,29 @@ public:
 		if (isWavePlaying)
 		{
 			currentWaveTimer += deltaTime;
+			spawnTimer += deltaTime;
 
-			if (enemiesTospawn > 0)
+			if (spawnTimer >= spawnIntervall)
 			{
-				Vector2 spawnPosition = GetSpawnPosition(playerPosition, screenWidth, screenHeight);
-				float statScale = GetStatScaleValue();
-				
-				switch (RandomizeSwitchTrigger())
+				spawnTimer = 0.0f;
+				if (enemiesTospawn > 0)
 				{
-				case 0:
-					enemies.push_back(EntityFactory::CreateStdEnemy(spawnPosition, player, projectileManager, statScale));
-					break;
-				case 1:
-					enemies.push_back(EntityFactory::CreateHeavyEnemy(spawnPosition, player, projectileManager, statScale));
-					break;
-				
+					Vector2 spawnPosition = GetSpawnPosition(playerPosition, screenWidth, screenHeight);
+					float statScale = GetStatScaleValue();
+
+					switch (RandomizeSwitchTrigger())
+					{
+					case 0:
+						enemies.push_back(EntityFactory::CreateStdEnemy(spawnPosition, player, projectileManager, statScale));
+						break;
+					case 1:
+						enemies.push_back(EntityFactory::CreateHeavyEnemy(spawnPosition, player, projectileManager, statScale));
+						break;
+
+					}
+
+					enemiesTospawn--;
 				}
-				
-				enemiesTospawn--;
 			}
 
 			if (IsWaveComplete((int)enemies.size()))

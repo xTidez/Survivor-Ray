@@ -13,18 +13,7 @@ GameManager::GameManager()
 
 void GameManager::Initialize(int screenWidth, int screenHeight, Vector2 screenCenter)
 {
-    eventManager.SubscribeToHealthChanged([](const HealthChangedEvent& event) {
-        if (event.delta < 0)
-        {
-            TraceLog(LOG_INFO, "Player took %d damage! Health: %d/%d",
-                -event.delta, event.newHealth, event.maxHealth);
-        }
-        else
-        {
-            TraceLog(LOG_INFO, "Player healed %d! Health: %d/%d",
-                event.delta, event.newHealth, event.maxHealth);
-        }
-        });
+  
 
     player = EntityFactory::CreatePlayer(screenCenter, &eventManager, projectileManager);
     currentGameState = Gamestate::Paused;
@@ -54,7 +43,9 @@ void GameManager::Update(float deltaTime)
             enemy->Update(deltaTime);
             auto* enemyStats = enemy->GetComponent<StatsComponent>();
             if (enemyStats && enemyStats->currentHealth <= 0)
-            {
+            {   
+                auto* playerStats = player->GetComponent<StatsComponent>();
+                if (playerStats) playerStats->experience += 10;
                 enemy->SetActive(false);
             }
 

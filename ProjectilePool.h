@@ -10,7 +10,7 @@ struct Projectile
 	int shootingAtEnemyOrPlayer = 0;
 	Vector2 position;
 	Vector2 velocity;
-	float speedStd = 80.0f;
+	float speedStd = 100.0f;
 	float speedMultiplier = 1.0f;
 	int damage;
 	float radius;

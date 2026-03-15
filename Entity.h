@@ -81,14 +81,15 @@ public:
     {
         auto it = componentMap.find(typeid(T));
         if (it != componentMap.end())
-        {
+        {   
+            Component* toRemove = it->second;
             componentMap.erase(it);
 
            
             components.erase(
                 std::remove_if(components.begin(), components.end(),
-                    [&](const std::unique_ptr<Component>& c) {
-                        return c.get() == it->second;
+                    [toRemove](const std::unique_ptr<Component>& c) {
+                        return c.get() == toRemove;
                     }),
                 components.end()
             );

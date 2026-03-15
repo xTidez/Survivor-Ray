@@ -147,8 +147,8 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="GameManager.h" />
-    <ClInclude Include="EventManager.h" />
     <ClInclude Include="HealthBarComponent.h" />
+    <ClInclude Include="LevelingComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PlayerInputComponent.h" />
     <ClInclude Include="StatsComponent.h" />
