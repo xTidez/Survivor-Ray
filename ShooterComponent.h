@@ -13,8 +13,11 @@ class ShooterComponent : public Component
 	public:
 		float cooldown;
 		ProjectileManager& projectileManager;
+		int shootingAtEnemyOrPlayer; // enemy 0, player 1 
+		Vector2 targetToShoot; 
+		int TypeOfProjectile;
 
-		ShooterComponent(ProjectileManager& myManagerOfProjectiles) : cooldown(0.0f), projectileManager(myManagerOfProjectiles)
+		ShooterComponent(ProjectileManager& myManagerOfProjectiles) : cooldown(0.0f), projectileManager(myManagerOfProjectiles),TypeOfProjectile(0),shootingAtEnemyOrPlayer(0), targetToShoot{0,0}
 		{
 		
 		}
@@ -49,7 +52,7 @@ class ShooterComponent : public Component
 		void Update(float deltaTime) override
 		{
 			cooldown -= deltaTime;
-
+			
 			if (cooldown <= 0.0f)
 			{
 				auto* transform = whatHasTheComponent->GetComponent<TransformComponent>();
@@ -59,14 +62,15 @@ class ShooterComponent : public Component
 				float fireRate = entityStats ? entityStats->fireRate : 15.0f;
 
 				Vector2 firePoint = GetFirepoint();
-				Vector2 direction =
+				Vector2 direction = Vector2Normalize(Vector2
 				{
 					cosf(transform->rotation),
 					sinf(transform->rotation)
 
-				};
+				});
 
-				projectileManager.Shoot(firePoint, direction, 0);
+				projectileManager.Shoot(firePoint, direction, TypeOfProjectile, shootingAtEnemyOrPlayer, targetToShoot);
+				projectileManager.UpdateHomingTargeting(shootingAtEnemyOrPlayer, targetToShoot);
 
 				cooldown = 1.0f / fireRate;
 			}

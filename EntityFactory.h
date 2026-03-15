@@ -6,11 +6,12 @@
 #include "StatsComponent.h"
 #include "MovementComponent.h"
 #include "PlayerInputComponent.h"
+#include "ShooterComponent.h"
 
 
 namespace EntityFactory
 {
-	std::unique_ptr<Entity> CreatePlayer(Vector2 spawnPosition, EventManager* eventManager)
+	std::unique_ptr<Entity> CreatePlayer(Vector2 spawnPosition, EventManager* eventManager, ProjectileManager& projectileManager)
 	{
        
         auto player = std::make_unique<Entity>();
@@ -27,7 +28,7 @@ namespace EntityFactory
 
         player->AddComponent<MovementComponent>();
         player->AddComponent<PlayerInputComponent>();
-
+        player->AddComponent<ShooterComponent>(projectileManager);
 
 
 

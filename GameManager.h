@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "Entity.h"
 #include "EventManager.h"
+#include "ProjectileManager.h"
 
 enum class Gamestate
 {
@@ -17,6 +18,7 @@ class GameManager
 private:
 	Gamestate currentGameState;
 	EventManager eventManager;
+	ProjectileManager projectileManager;
 	std::unique_ptr<Entity> player;
 	float gameTimer;
 

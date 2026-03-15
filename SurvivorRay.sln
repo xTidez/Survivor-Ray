@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36915.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RaylibGame", "RaylibGame.vcxproj", "{CF6A59A3-AFCF-4D52-8CC9-7B936D96478C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Survivor Ray", "RaylibGame.vcxproj", "{CF6A59A3-AFCF-4D52-8CC9-7B936D96478C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

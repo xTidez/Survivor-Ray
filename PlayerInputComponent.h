@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "TransformComponent.h"
 #include "MovementComponent.h"
+#include "ShooterComponent.h"
 #include "raylib.h"
 #include "raymath.h"
 
@@ -35,7 +36,8 @@ public:
 
 		position->rotation = atan2f(lookAt.y, lookAt.x);
 
-
+		auto* shooter = whatHasTheComponent->GetComponent<ShooterComponent>();
+		if (shooter) shooter->targetToShoot = mousePosition;
 	}
 
 

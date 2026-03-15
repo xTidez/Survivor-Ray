@@ -25,7 +25,7 @@ void GameManager::Initialize(int screenWidth, int screenHeight, Vector2 screenCe
         }
         });
 
-    player = EntityFactory::CreatePlayer(screenCenter, &eventManager);
+    player = EntityFactory::CreatePlayer(screenCenter, &eventManager, projectileManager);
     currentGameState = Gamestate::Paused;
     gameTimer = 0.0f;
 }
@@ -36,7 +36,7 @@ void GameManager::Update(float deltaTime)
     {
         gameTimer += deltaTime;
         player->Update(deltaTime);
-
+        projectileManager.Update(deltaTime);
         auto* stats = player->GetComponent<StatsComponent>();
 
         if (IsKeyPressed(KEY_J) && stats)
@@ -103,6 +103,7 @@ void GameManager::Draw()
         }
 
         DrawText(TextFormat("Time: %.1f", gameTimer), GetScreenWidth() - 120, 10, 20, BLACK);
+        projectileManager.Draw();
     }
 
     if (currentGameState == Gamestate::Paused)

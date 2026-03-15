@@ -47,7 +47,7 @@ public:
     template<typename T, typename... Args>
     T* AddComponent(Args&&... args)
     {
-        T* component = new T(std::forward<args>(args)...);
+        T* component = new T(std::forward<Args>(args)...);
         component->Init(this);
 
         components.push_back(std::unique_ptr<Component>(component));

@@ -1,53 +1,60 @@
 #pragma once
 #include "raylib.h"
-#include "Player.h"
+
 
 #define MAX_PROJECTILES 300
 
-typedef struct  
+struct Projectile 
 {
 	bool isActive;
+	int shootingAtEnemyOrPlayer = 0;
 	Vector2 position;
 	Vector2 velocity;
+	float speedStd = 150.0f;
+	float speedMultiplier = 1.0f;
 	int typeOfProjectile;
 
-	union {
+	union 
+	{
 
-		struct 
+		struct
 		{
 			float radius;
 			float activeDuration;
 			int damage;
 		} stdBullet;
 
-		struct 
+		struct
 		{
 			Vector2 homingTargetLocation;
 			float agility;
 			int damage;
 
 		} homingRocket;
-		
-		struct 
+
+		struct
 		{
+			float radius;
 			float explotionRadius;
 			int damage;
 			float activeDuration;
 
 		} explodingBullet;
 
-	
+
 	};
+	
 
-} Projectile;
+};
 
-typedef Projectile ProjectilePool[MAX_PROJECTILES];
+using ProjectilePool = Projectile[MAX_PROJECTILES];
 
 int FindBulletInPool(ProjectilePool& projPool);
-
-void ActivateBulletPool(ProjectilePool& projPool, int bulletNr, Vector2 position, int bulletType, Vector2 velocity, const Player& player);
+void ActivateBulletPool(ProjectilePool& projPool, int bulletNr, Vector2 position, int bulletType, Vector2 direction, int team, Vector2 homingTarget = { 0, 0 });
 
 void DeactivateBulletPool(ProjectilePool projPool, int bulletNr);
+
+void UpdateProjectilePool(ProjectilePool& projPool, float deltaTime);
 
 
 

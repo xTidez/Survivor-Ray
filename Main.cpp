@@ -1,5 +1,4 @@
 #include "raylib.h"
-#include "player.h"
 #include "GameManager.h"
 
 int main()
@@ -24,7 +23,7 @@ int main()
         // Update
         gameManager.Update(deltaTime);
 
-        
+        BeginDrawing();
 
         ClearBackground(RAYWHITE);
         
