@@ -39,6 +39,11 @@ void GameManager::Update(float deltaTime)
         projectileManager.Update(deltaTime);
         auto* stats = player->GetComponent<StatsComponent>();
 
+        for (auto& enemy : enemies)
+        {
+            enemy->Update(deltaTime);
+        }
+
         if (IsKeyPressed(KEY_J) && stats)
         {
             stats->currentHealth -= 10;
@@ -82,24 +87,34 @@ void GameManager::Draw()
 {
     if (currentGameState == Gamestate::Playing)
     {
-        auto* transform = player->GetComponent<TransformComponent>();
+        auto* playerTransform = player->GetComponent<TransformComponent>();
         auto* playerStats = player->GetComponent<StatsComponent>();
 
-        if (transform)
+        if (playerTransform)
         {
-            DrawCircleV(transform->position, transform->radius, DARKBLUE);
+            DrawCircleV(playerTransform->position, playerTransform->radius, DARKBLUE);
             Vector2 firePoint =
             {
-                transform->position.x + cosf(transform->rotation) * transform->radius,
-                transform->position.y + sinf(transform->rotation) * transform->radius
+                playerTransform->position.x + cosf(playerTransform->rotation) * playerTransform->radius,
+                playerTransform->position.y + sinf(playerTransform->rotation) * playerTransform->radius
             };
-            DrawCircleV(firePoint, transform->radius / 4, BLACK);
+            DrawCircleV(firePoint, playerTransform->radius / 4, BLACK);
         }
 
         if (playerStats)
         {
             DrawText(TextFormat("Health: %d/%d", playerStats->currentHealth, playerStats->maxHealth), 10, 10, 20, BLACK);
             DrawText(TextFormat("Level: %d", playerStats->level), 10, 35, 20, BLACK);
+        }
+
+        for (auto& enemy : enemies)
+        {
+            auto* enemyTransform = enemy->GetComponent<TransformComponent>();
+            if (enemyTransform)
+            {
+                DrawCircleV(enemyTransform->position, enemyTransform->radius, BLACK);
+            }
+
         }
 
         DrawText(TextFormat("Time: %.1f", gameTimer), GetScreenWidth() - 120, 10, 20, BLACK);
@@ -123,6 +138,7 @@ void GameManager::Draw()
 
 void GameManager::Reset()
 {
+    enemies.clear();
     player.reset();
     Vector2 screenCenter = { GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f };
     Initialize(GetScreenWidth(), GetScreenHeight(), screenCenter);

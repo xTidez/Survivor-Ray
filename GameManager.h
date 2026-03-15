@@ -20,6 +20,7 @@ private:
 	EventManager eventManager;
 	ProjectileManager projectileManager;
 	std::unique_ptr<Entity> player;
+	std::vector<std::unique_ptr<Entity>> enemies;
 	float gameTimer;
 
 public:
