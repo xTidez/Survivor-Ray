@@ -27,6 +27,10 @@ public:
 
 	};
 
+	ProjectilePool& GetProjectilePool()
+	{
+		return projectilePool;
+	}
 
 	void Update(float deltaTime)
 	{
@@ -59,7 +63,7 @@ public:
 			{
 			
 				case 0:
-					DrawCircleV(projectilePool[p].position, projectilePool[p].stdBullet.radius, RED);
+					DrawCircleV(projectilePool[p].position, projectilePool[p].radius, RED);
 					break;
 
 				case 1:
@@ -68,7 +72,7 @@ public:
 					Vector2 leftLocal = { -4, 6 };
 					Vector2 rightLocal = { 4, 6 };
 					Vector2 homingTarget = projectilePool[p].homingRocket.homingTargetLocation;
-					float rotation = atan2(homingTarget.x, homingTarget.y);
+					float rotation = atan2(projectilePool[p].velocity.y, projectilePool[p].velocity.x);
 
 					Vector2 tip = Vector2Add(projectilePool[p].position, Vector2Rotate(tipLocal, rotation));
 					Vector2 left = Vector2Add(projectilePool[p].position, Vector2Rotate(leftLocal, rotation));
@@ -80,8 +84,8 @@ public:
 
 				case 2:
 				{
-					DrawCircleV(projectilePool[p].position, projectilePool[p].explodingBullet.radius, BLACK);
-					DrawCircleLines(projectilePool[p].position.x, projectilePool[p].position.y, projectilePool[p].explodingBullet.radius * 2, YELLOW);
+					DrawCircleV(projectilePool[p].position, projectilePool[p].radius, BLACK);
+					DrawCircleLines(projectilePool[p].position.x, projectilePool[p].position.y, projectilePool[p].explodingBullet.explotionRadius, YELLOW);
 					break;
 				}
 			}
@@ -89,7 +93,12 @@ public:
 
 	}
 
+	void ClearBullets()
+	{
+		for (int p = 0; p < MAX_PROJECTILES; p++)
+			projectilePool[p].isActive = false;
 
+	}
 
 
 

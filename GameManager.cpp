@@ -4,6 +4,7 @@
 #include "MovementComponent.h"
 #include "PlayerInputComponent.h"
 #include "EntityFactory.h"
+#include "CollisionManager.h"
 
 GameManager::GameManager()
     : currentGameState(Gamestate::Playing), eventManager(), player(), gameTimer(0.0f)
@@ -40,6 +41,7 @@ void GameManager::Update(float deltaTime)
         gameTimer += deltaTime;
         player->Update(deltaTime);
         projectileManager.Update(deltaTime);
+        collisionManager::CheckForProjectileCollisions(projectileManager.GetProjectilePool(), player.get(), enemies);
         auto* playerStats = player->GetComponent<StatsComponent>();
 
         auto* playerTransform = player->GetComponent<TransformComponent>();
@@ -130,6 +132,7 @@ void GameManager::Draw()
             if (enemyTransform)
             {
                 DrawCircleV(enemyTransform->position, enemyTransform->radius, BLACK);
+                enemy->Draw();
             }
 
         }
@@ -157,6 +160,7 @@ void GameManager::Reset()
 {
     enemies.clear();
     player.reset();
+    projectileManager.ClearBullets();
     waveManager = WaveManager();
     Vector2 screenCenter = { GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f };
     Initialize(GetScreenWidth(), GetScreenHeight(), screenCenter);

@@ -38,6 +38,17 @@ public:
 
 		auto* shooter = whatHasTheComponent->GetComponent<ShooterComponent>();
 		if (shooter) shooter->targetToShoot = mousePosition;
+
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+		{
+			Vector2 targetLocation = GetMousePosition();
+			Vector2 firePoint = shooter->GetFirepoint();
+
+			Vector2 direction = Vector2Normalize(Vector2{ targetLocation.x - firePoint.x, targetLocation.y - firePoint.y });
+
+			shooter->projectileManager.Shoot(firePoint, direction, 2, shooter->shootingAtEnemyOrPlayer, targetLocation);
+
+		}
 	}
 
 

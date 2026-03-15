@@ -141,12 +141,14 @@
     <ClCompile Include="GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="EnemyBehaveComponent.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="EventManager.h" />
+    <ClInclude Include="HealthBarComponent.h" />
     <ClInclude Include="MovementComponent.h" />
     <ClInclude Include="PlayerInputComponent.h" />
     <ClInclude Include="StatsComponent.h" />

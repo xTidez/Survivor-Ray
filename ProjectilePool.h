@@ -10,34 +10,36 @@ struct Projectile
 	int shootingAtEnemyOrPlayer = 0;
 	Vector2 position;
 	Vector2 velocity;
-	float speedStd = 150.0f;
+	float speedStd = 80.0f;
 	float speedMultiplier = 1.0f;
+	int damage;
+	float radius;
 	int typeOfProjectile;
+
 
 	union 
 	{
 
 		struct
 		{
-			float radius;
-			float activeDuration;
-			int damage;
+			
 		} stdBullet;
 
 		struct
 		{
 			Vector2 homingTargetLocation;
 			float agility;
-			int damage;
+			
 
 		} homingRocket;
 
 		struct
 		{
-			float radius;
-			float explotionRadius;
-			int damage;
-			float activeDuration;
+			
+			float explotionRadius; 
+			float fuse;
+			Vector2 landAt;
+			bool readyToBlow;
 
 		} explodingBullet;
 

@@ -19,40 +19,45 @@ int FindBulletInPool(ProjectilePool& projPool)
 	return -1;
 }
 
-void ActivateBulletPool(ProjectilePool& projPool, int bulletNr, Vector2 firePostion, int bulletType, Vector2 direction,int shootingAtEnemyOrPlayer, Vector2 homingTarget)
+void ActivateBulletPool(ProjectilePool& projectilePool, int bulletNr, Vector2 firePostion, int bulletType, Vector2 direction,int shootingAtEnemyOrPlayer, Vector2 homingTarget)
 {
-	projPool[bulletNr].isActive = true;
-	projPool[bulletNr].position = firePostion;
-	projPool[bulletNr].typeOfProjectile = bulletType;
-	projPool[bulletNr].shootingAtEnemyOrPlayer = shootingAtEnemyOrPlayer;
+	projectilePool[bulletNr].isActive = true;
+	projectilePool[bulletNr].position = firePostion;
+	projectilePool[bulletNr].typeOfProjectile = bulletType;
+	projectilePool[bulletNr].shootingAtEnemyOrPlayer = shootingAtEnemyOrPlayer;
 
 	switch (bulletType)
 	{
 		case 0:
-			projPool[bulletNr].stdBullet.radius = 2.0f;
-			projPool[bulletNr].stdBullet.activeDuration = 5.0f;
-			projPool[bulletNr].stdBullet.damage = 10;
+			projectilePool[bulletNr].radius = 3.0f;
+			projectilePool[bulletNr].damage = 10;
 			break;
 
 		case 1:
-			projPool[bulletNr].homingRocket.homingTargetLocation = homingTarget;
-			projPool[bulletNr].homingRocket.agility = 3.0f;
-			projPool[bulletNr].speedMultiplier = 1.2;
-			projPool[bulletNr].homingRocket.damage = 20; 
+			projectilePool[bulletNr].radius = 5.0f;
+			projectilePool[bulletNr].homingRocket.homingTargetLocation = homingTarget;
+			//add line for activeduration
+			projectilePool[bulletNr].homingRocket.agility = 3.0f;
+			projectilePool[bulletNr].speedMultiplier = 1.2;
+			projectilePool[bulletNr].damage = 20; 
 			break;
 
 		case 2:
-			projPool[bulletNr].explodingBullet.radius = 5.0f;
-			projPool[bulletNr].explodingBullet.explotionRadius = 10.0f;
-			projPool[bulletNr].explodingBullet.activeDuration = 5.0f;
-			projPool[bulletNr].speedMultiplier = 0.8;
-			projPool[bulletNr].explodingBullet.damage = 25;
+			projectilePool[bulletNr].radius = 10.0f;
+			projectilePool[bulletNr].explodingBullet.explotionRadius = 18.0f;
+			projectilePool[bulletNr].explodingBullet.fuse = 7.0f;
+			projectilePool[bulletNr].explodingBullet.readyToBlow = false;
+			projectilePool[bulletNr].speedMultiplier = 0.8;
+			projectilePool[bulletNr].damage = 25;
+			projectilePool[bulletNr].explodingBullet.landAt = homingTarget;
+			
+
 			break;
 
 	} 
 
-	float bulletSpeed = projPool[bulletNr].speedStd * projPool[bulletNr].speedMultiplier;
-	projPool[bulletNr].velocity =
+	float bulletSpeed = projectilePool[bulletNr].speedStd * projectilePool[bulletNr].speedMultiplier;
+	projectilePool[bulletNr].velocity =
 	{
 		direction.x * bulletSpeed,
 		direction.y * bulletSpeed
@@ -87,7 +92,27 @@ void UpdateProjectilePool(ProjectilePool& projPool, float deltaTime)
 		projectile.position.x += projectile.velocity.x * deltaTime;
 		projectile.position.y += projectile.velocity.y * deltaTime;
 
-		
+		if (projectile.typeOfProjectile == 2)
+		{
+			projectile.explodingBullet.fuse -= deltaTime;
+			
+			if (projectile.explodingBullet.fuse <= 0)
+			{
+				projectile.explodingBullet.readyToBlow = true;
+
+			}
+
+			float distanceToTarget = Vector2Distance(projectile.position, projectile.explodingBullet.landAt);
+			if (distanceToTarget < 1.0f)
+			{
+
+				projectile.velocity = {0,0};
+				
+			}
+
+			
+		}
+
 		if (projectile.position.x > GetScreenWidth() || projectile.position.y > GetScreenHeight() || projectile.position.x < 0 || projectile.position.y < 0)
 		{
 			projectile.isActive = false;

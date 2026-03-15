@@ -6,8 +6,9 @@
 #include "ProjectileManager.h"
 #include "WaveManager.h"
 
+
 enum class Gamestate
-{
+{	
 	Paused, 
 	Playing,
 	GameOver

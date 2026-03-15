@@ -8,6 +8,7 @@
 #include "PlayerInputComponent.h"
 #include "ShooterComponent.h"
 #include "EnemyBehaveComponent.h"
+#include "HealthBarComponent.h"
 
 
 namespace EntityFactory
@@ -23,7 +24,7 @@ namespace EntityFactory
         auto* stats = player->AddComponent<StatsComponent>();
         stats->currentHealth = 100;
         stats->maxHealth = 100;
-        stats->speed = 20.0f;
+        stats->speed = 50.0f;
         stats->damage = 10;
         stats->fireRate = 1.0f;
 
@@ -57,6 +58,7 @@ namespace EntityFactory
         stats->fireRate = 1.0f * statScale;
 
         stdEnemy->AddComponent<MovementComponent>();
+        stdEnemy->AddComponent <HealthBarComponent>();
 
         auto* behaviour = stdEnemy->AddComponent<EnemyBehaveComponent>();
         behaviour->attackThis = attackTarget;
@@ -85,6 +87,7 @@ namespace EntityFactory
         stats->fireRate = 1.0f * statScale;
 
         heavyEnemy->AddComponent<MovementComponent>();
+        heavyEnemy->AddComponent <HealthBarComponent>();
 
         auto* behaviour = heavyEnemy->AddComponent<EnemyBehaveComponent>();
         behaviour->attackThis = attackTarget;
