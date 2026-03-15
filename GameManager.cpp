@@ -28,33 +28,50 @@ void GameManager::Initialize(int screenWidth, int screenHeight, Vector2 screenCe
     player = EntityFactory::CreatePlayer(screenCenter, &eventManager, projectileManager);
     currentGameState = Gamestate::Paused;
     gameTimer = 0.0f;
+
+    waveManager.StartNextWave();
 }
 
 void GameManager::Update(float deltaTime)
 {
     if (currentGameState == Gamestate::Playing)
     {
+        
         gameTimer += deltaTime;
         player->Update(deltaTime);
         projectileManager.Update(deltaTime);
-        auto* stats = player->GetComponent<StatsComponent>();
+        auto* playerStats = player->GetComponent<StatsComponent>();
+
+        auto* playerTransform = player->GetComponent<TransformComponent>();
+        Vector2 playerPosition = playerTransform ? playerTransform->position : Vector2{ 0,0 };
+
+        waveManager.Update(deltaTime, playerPosition, GetScreenWidth(), GetScreenHeight(), player.get(), projectileManager, enemies);
 
         for (auto& enemy : enemies)
         {
             enemy->Update(deltaTime);
+            auto* enemyStats = enemy->GetComponent<StatsComponent>();
+            if (enemyStats && enemyStats->currentHealth <= 0)
+            {
+                enemy->SetActive(false);
+            }
+
         }
 
-        if (IsKeyPressed(KEY_J) && stats)
+        enemies.erase(std::remove_if(enemies.begin(), enemies.end(), [](const std::unique_ptr<Entity>& e)
+            {return !e->IsActive(); }), enemies.end()); // cleanup code for enemies, sorts and deletes inactives
+
+        if (IsKeyPressed(KEY_J) && playerStats)
         {
-            stats->currentHealth -= 10;
-            if (stats->currentHealth < 0) stats->currentHealth = 0;
+            playerStats->currentHealth -= 10;
+            if (playerStats->currentHealth < 0) playerStats->currentHealth = 0;
         }
 
-        if (IsKeyPressed(KEY_K) && stats)
+        if (IsKeyPressed(KEY_K) && playerStats)
         {
-            stats->currentHealth += 15;
-            if (stats->currentHealth > stats->maxHealth)
-                stats->currentHealth = stats->maxHealth;
+            playerStats->currentHealth += 15;
+            if (playerStats->currentHealth > playerStats->maxHealth)
+                playerStats->currentHealth = playerStats->maxHealth;
         }
 
         if (IsKeyPressed(KEY_P))
@@ -62,7 +79,7 @@ void GameManager::Update(float deltaTime)
             currentGameState = Gamestate::Paused;
         }
 
-        if (stats && stats->currentHealth <= 0)
+        if (playerStats && playerStats->currentHealth <= 0)
         {
             currentGameState = Gamestate::GameOver;
         }
@@ -140,6 +157,7 @@ void GameManager::Reset()
 {
     enemies.clear();
     player.reset();
+    waveManager = WaveManager();
     Vector2 screenCenter = { GetScreenWidth() * 0.5f, GetScreenHeight() * 0.5f };
     Initialize(GetScreenWidth(), GetScreenHeight(), screenCenter);
 }

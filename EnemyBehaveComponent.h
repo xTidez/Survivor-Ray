@@ -20,7 +20,7 @@ public:
 		if (!attackThis) return;
 
 		auto* myTransform = whatHasTheComponent->GetComponent<TransformComponent>();
-		auto* attackThisSTransform = whatHasTheComponent->GetComponent<TransformComponent>();
+		auto* attackThisSTransform = attackThis->GetComponent<TransformComponent>();
 
 		if (!myTransform || !attackThisSTransform) return;
 
@@ -45,7 +45,7 @@ public:
 
 		};
 
-		myTransform->rotation = atan2f(lookTowards.x, lookTowards.y);
+		myTransform->rotation = atan2f(lookTowards.y, lookTowards.x);
 
 		auto* myShooter = whatHasTheComponent->GetComponent<ShooterComponent>();
 		if (myShooter)

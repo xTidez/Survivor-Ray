@@ -12,7 +12,7 @@
 
 namespace EntityFactory
 {
-	std::unique_ptr<Entity> CreatePlayer(Vector2 spawnPosition, EventManager* eventManager, ProjectileManager& projectileManager)
+    inline std::unique_ptr<Entity> CreatePlayer(Vector2 spawnPosition, EventManager* eventManager, ProjectileManager& projectileManager)
 	{
        
         auto player = std::make_unique<Entity>();
@@ -40,7 +40,7 @@ namespace EntityFactory
 	}
 
 
-    std::unique_ptr<Entity> CreateStdEnemy(Vector2 spawnPosition, Entity* attackTarget, ProjectileManager& projectileManager)
+    inline std::unique_ptr<Entity> CreateStdEnemy(Vector2 spawnPosition, Entity* attackTarget, ProjectileManager& projectileManager, float statScale)
     {
         auto stdEnemy = std::make_unique<Entity>();
 
@@ -50,25 +50,25 @@ namespace EntityFactory
 
         auto* stats = stdEnemy->AddComponent<StatsComponent>();
 
-        stats->currentHealth = 40;
-        stats->maxHealth = 40;
-        stats->speed = 15.0f;
-        stats->damage = 5;
-        stats->fireRate = 1.0f;
+        stats->currentHealth = (int)(40 * statScale);
+        stats->maxHealth = (int)(40 * statScale);
+        stats->speed = 15.0f * statScale;
+        stats->damage = (int)(5 * statScale);
+        stats->fireRate = 1.0f * statScale;
 
         stdEnemy->AddComponent<MovementComponent>();
 
         auto* behaviour = stdEnemy->AddComponent<EnemyBehaveComponent>();
         behaviour->attackThis = attackTarget;
 
-        auto* shooter = stdEnemy->AddComponent<ShooterComponent>();
+        auto* shooter = stdEnemy->AddComponent<ShooterComponent>(projectileManager);
         shooter->shootingAtEnemyOrPlayer = 1 ;
 
         return stdEnemy;
 
     }
 
-    std::unique_ptr<Entity> CreateHeavyEnemy(Vector2 spawnPosition, Entity* attackTarget, ProjectileManager& projectileManager)
+    inline std::unique_ptr<Entity> CreateHeavyEnemy(Vector2 spawnPosition, Entity* attackTarget, ProjectileManager& projectileManager, float statScale)
     {
         auto heavyEnemy = std::make_unique<Entity>();
 
@@ -78,18 +78,18 @@ namespace EntityFactory
 
         auto* stats = heavyEnemy->AddComponent<StatsComponent>();
 
-        stats->currentHealth = 200;
-        stats->maxHealth = 200;
-        stats->speed = 10.0f;
-        stats->damage = 20;
-        stats->fireRate = 1.0f;
+        stats->currentHealth = (int)(200 * statScale);
+        stats->maxHealth = (int)(200 * statScale);
+        stats->speed = 10.0f * statScale;
+        stats->damage = (int)(20 * statScale);
+        stats->fireRate = 1.0f * statScale;
 
         heavyEnemy->AddComponent<MovementComponent>();
 
         auto* behaviour = heavyEnemy->AddComponent<EnemyBehaveComponent>();
         behaviour->attackThis = attackTarget;
 
-        auto* shooter = heavyEnemy->AddComponent<ShooterComponent>();
+        auto* shooter = heavyEnemy->AddComponent<ShooterComponent>(projectileManager);
         shooter->shootingAtEnemyOrPlayer = 1;
         shooter->TypeOfProjectile = 1;
 

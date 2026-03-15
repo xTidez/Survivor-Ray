@@ -154,6 +154,7 @@
     <ClInclude Include="ShooterComponent.h" />
     <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="ProjectilePool.h" />
+    <ClInclude Include="WaveManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

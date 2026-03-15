@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "EventManager.h"
 #include "ProjectileManager.h"
+#include "WaveManager.h"
 
 enum class Gamestate
 {
@@ -19,6 +20,7 @@ private:
 	Gamestate currentGameState;
 	EventManager eventManager;
 	ProjectileManager projectileManager;
+	WaveManager waveManager;
 	std::unique_ptr<Entity> player;
 	std::vector<std::unique_ptr<Entity>> enemies;
 	float gameTimer;
