@@ -142,7 +142,6 @@
     <ClCompile Include="GameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CanShootComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityFactory.h" />
